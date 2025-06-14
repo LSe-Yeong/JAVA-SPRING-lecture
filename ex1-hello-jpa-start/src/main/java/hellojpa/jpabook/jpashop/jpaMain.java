@@ -1,6 +1,7 @@
 package hellojpa.jpabook.jpashop;
 
 import hellojpa.jpabook.jpashop.domain.Order;
+import hellojpa.jpabook.jpashop.domain.OrderItem;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -19,9 +20,10 @@ public class jpaMain {
         tx.begin(); //트랜잭션 시작
 
         try {
-            Order order = em.find(Order.class, 1L);
-            Long memberId = order.getMemberId();
-            Member member = em.find(Member.class, memberId);
+            Order order = new Order();
+            em.persist(order);
+
+            order.addOrderItem(new OrderItem());
 
             tx.commit();
         } catch (Exception e) {

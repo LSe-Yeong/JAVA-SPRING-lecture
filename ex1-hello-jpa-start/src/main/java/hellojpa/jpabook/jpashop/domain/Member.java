@@ -1,12 +1,13 @@
 package hellojpa.jpabook.jpashop.domain;
 
+import hellojpa.BaseEntityT;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Member {
+public class Member extends BaseEntityT {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "MEMBER_ID")

@@ -1,12 +1,15 @@
 package hellojpa.jpabook.jpashop.domain;
 
+import hellojpa.BaseEntityT;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.FetchType.*;
+
 @Entity
-public class Category {
+public class Category extends BaseEntityT {
 
     @Id
     @GeneratedValue
@@ -14,7 +17,7 @@ public class Category {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "PARENT_ID")
     private Category parent;
 

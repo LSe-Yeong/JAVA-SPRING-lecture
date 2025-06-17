@@ -1,5 +1,6 @@
 package hellojpa.jpabook.jpashop;
 
+import hellojpa.jpabook.jpashop.domain.Book;
 import hellojpa.jpabook.jpashop.domain.Order;
 import hellojpa.jpabook.jpashop.domain.OrderItem;
 import jakarta.persistence.EntityManager;
@@ -20,10 +21,11 @@ public class jpaMain {
         tx.begin(); //트랜잭션 시작
 
         try {
-            Order order = new Order();
-            em.persist(order);
+            Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("김영한");
 
-            order.addOrderItem(new OrderItem());
+            em.persist(book);
 
             tx.commit();
         } catch (Exception e) {

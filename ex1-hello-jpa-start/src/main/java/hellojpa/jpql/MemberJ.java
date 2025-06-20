@@ -4,6 +4,10 @@ import hellojpa.Team;
 import jakarta.persistence.*;
 
 @Entity
+@NamedQuery(
+        name = "MemberJ.findByUsername",
+        query = "select m from MemberJ m where m.username = :username"
+)
 public class MemberJ {
 
     @Id

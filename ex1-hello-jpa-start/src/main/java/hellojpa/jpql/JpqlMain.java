@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
+import java.util.Collection;
 import java.util.List;
 
 public class JpqlMain{
@@ -20,31 +21,42 @@ public class JpqlMain{
         tx.begin(); //트랜잭션 시작
 
         try {
-            for (int i=0; i<100; i++) {
 
-                TeamJ teamJ = new TeamJ();
-                teamJ.setName("teamA");
-                em.persist(teamJ);
+            TeamJ teamJA = new TeamJ();
+            teamJA.setName("팀A");
+            em.persist(teamJA);
 
-                MemberJ member = new MemberJ();
-                member.setUsername("관리자");
-                member.setAge(i);
-                member.setType(MemberType.ADMIN);
+            TeamJ teamB = new TeamJ();
+            teamB.setName("팀B");
+            em.persist(teamB);
 
-                member.setTeam(teamJ);
+            MemberJ member = new MemberJ();
+            member.setUsername("회원1");
+            member.setTeam(teamJA);
+            em.persist(member);
 
-                em.persist(member);
-            }
+            MemberJ member2 = new MemberJ();
+            member2.setUsername("회원2");
+            member2.setTeam(teamJA);
+            em.persist(member2);
+
+            MemberJ member3 = new MemberJ();
+            member3.setUsername("회원3");
+            member3.setTeam(teamB);
+            em.persist(member3);
+
 
             em.flush();
             em.clear();
 
-            String query = "select locate('de','abcdefg') from MemberJ m";
-            List<Integer> resultList = em.createQuery(query, Integer.class).getResultList();
-            for (Integer i : resultList) {
-                System.out.println("i = " + i);
+            int count = em.createQuery("update MemberJ m set m.age = 20")
+                    .executeUpdate();
 
-            }
+            MemberJ findMember = em.find(MemberJ.class, member3.getId());
+
+            System.out.println("count = " + count);
+
+            System.out.println("member3 = " + findMember.getAge());
 
             tx.commit(); //커밋
         } catch (Exception e) {

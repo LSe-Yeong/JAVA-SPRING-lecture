@@ -266,4 +266,45 @@ class MemberRepositoryTest {
     public void callCustom() {
         List<Member> result = memberRepository.findMemberCustom();
     }
+
+    @Test
+    public void projections() {
+        Team teamA = new Team("teamA");
+        entityManager.persist(teamA);
+
+        Member m1 = new Member("m1", 0, teamA);
+        Member m2 = new Member("m2", 0, teamA);
+        entityManager.persist(m1);
+        entityManager.persist(m2);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        List<NestedClosedProjections> result = memberRepository.findProjectionsByUsername("m1", NestedClosedProjections.class);
+
+        for (NestedClosedProjections nestedClosedProjections : result) {
+            System.out.println("usernameOnly = " + nestedClosedProjections);
+        }
+    }
+
+    @Test
+    public void nativeQuery() {
+        Team teamA = new Team("teamA");
+        entityManager.persist(teamA);
+
+        Member m1 = new Member("m1", 0, teamA);
+        Member m2 = new Member("m2", 0, teamA);
+        entityManager.persist(m1);
+        entityManager.persist(m2);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        Page<MemberProjections> result = memberRepository.findByNativeProjections(PageRequest.of(0, 10));
+        List<MemberProjections> content = result.getContent();
+        for (MemberProjections memberProjections : content) {
+            System.out.println("memberProjections.getUsername() = " + memberProjections.getUsername());
+            System.out.println("memberProjections.getTeamName() = " + memberProjections.getTeamName());
+        }
+    }
 }
